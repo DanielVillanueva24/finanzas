@@ -1,0 +1,37 @@
+# Blueprint de Render: New > Blueprint y apunta a este repositorio.
+services:
+  - type: web
+    name: finanzas-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        value: sqlite:///./finanzas.db
+      - key: SEED_DEMO_DATA
+        value: "true"
+      # Cambiala por la URL real del sitio estatico una vez creado.
+      - key: CORS_ORIGINS
+        value: https://finanzas-web.onrender.com
+
+  - type: web
+    name: finanzas-web
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      # Cambiala por la URL real del backend una vez creado.
+      - key: VITE_API_URL
+        value: https://finanzas-api.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

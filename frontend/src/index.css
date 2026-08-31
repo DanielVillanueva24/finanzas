@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-canvas text-ink antialiased;
+    font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    /* Evita el rebote elastico raro cuando la PWA corre en pantalla completa */
+    overscroll-behavior-y: none;
+  }
+
+  /* En iOS un input con menos de 16px provoca zoom automatico al enfocarlo */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary/60 ring-offset-2 ring-offset-canvas;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-card border border-black/[0.04] bg-white shadow-card;
+  }
+
+  .input-base {
+    @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-[15px] text-ink
+      transition-colors placeholder:text-muted/70 focus:border-primary focus:outline-none
+      focus:ring-2 focus:ring-primary/20 disabled:bg-slate-50 disabled:text-muted;
+  }
+
+  .input-error {
+    @apply border-expense focus:border-expense focus:ring-expense/20;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded-md bg-slate-200/70;
+  }
+
+  /* Respeta el notch y la barra inferior del iPhone */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Scrollbar discreto en escritorio */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(141, 153, 174, 0.35);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(141, 153, 174, 0.6);
+    background-clip: content-box;
+  }
+}
