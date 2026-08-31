@@ -39,7 +39,12 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,
-    allow_origin_regex=r"http://(localhost|127\.0\.0\.1|192\.168\.\d{1,3}\.\d{1,3}):\d+",
+    # Acepta ademas cualquier subdominio de onrender.com (el frontend desplegado)
+    # y la red local, para abrir la app desde el celular en la misma WiFi.
+    allow_origin_regex=(
+        r"https://[a-z0-9-]+\.onrender\.com"
+        r"|http://(localhost|127\.0\.0\.1|192\.168\.\d{1,3}\.\d{1,3}):\d+"
+    ),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -174,8 +174,10 @@ repo, o crear los dos servicios a mano:
 Variables de entorno:
 
 - `SECRET_KEY`: genera una nueva, no reutilices la del ejemplo.
-- `CORS_ORIGINS`: la URL de tu frontend, por ejemplo `https://finanzas-web.onrender.com`.
 - `SEED_DEMO_DATA`: `false` si no quieres el usuario demo.
+- `CORS_ORIGINS`: **no hace falta en Render**. El backend ya acepta cualquier
+  subdominio `https://*.onrender.com`. Ponla solo si usas un dominio propio
+  (basta el host, el `https://` se asume).
 
 ### Frontend (Static Site)
 
@@ -191,6 +193,20 @@ Variables de entorno:
 
 Y agrega una **Redirect/Rewrite Rule**: origen `/*`, destino `/index.html`, tipo `Rewrite`.
 Sin esa regla, recargar en `/transacciones` da 404.
+
+> **No elijas el runtime Docker.** Los `Dockerfile` del repo estan en `backend/` y `frontend/`
+> para el `docker compose` local; si creas el servicio como Docker sin Root Directory, Render
+> busca un `Dockerfile` en la raiz y falla con `failed to read dockerfile`.
+
+### Orden de los pasos
+
+1. Crea los dos servicios (Blueprint o a mano).
+2. Copia la URL que Render le dio al backend.
+3. Pegala en `VITE_API_URL` del static site.
+4. **Redespliega el static site.** Esa variable se hornea durante el build, cambiarla sola no
+   basta.
+
+El CORS no requiere ningun paso: el backend ya acepta el dominio `onrender.com` del frontend.
 
 ### Aviso importante sobre SQLite en el plan gratis
 

@@ -23,7 +23,16 @@ class Settings(BaseSettings):
 
     @property
     def cors_origin_list(self) -> list[str]:
-        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+        """Origenes permitidos. Si pegas solo el host, se asume https://."""
+        origins: list[str] = []
+        for raw in self.cors_origins.split(","):
+            origin = raw.strip().rstrip("/")
+            if not origin:
+                continue
+            if "://" not in origin:
+                origin = "https://" + origin
+            origins.append(origin)
+        return origins
 
 
 @lru_cache

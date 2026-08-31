@@ -17,9 +17,8 @@ services:
         value: sqlite:///./finanzas.db
       - key: SEED_DEMO_DATA
         value: "true"
-      # Cambiala por la URL real del sitio estatico una vez creado.
-      - key: CORS_ORIGINS
-        value: https://finanzas-web.onrender.com
+      # CORS_ORIGINS no hace falta en Render: el backend ya acepta cualquier
+      # subdominio de onrender.com. Agregala solo si usas un dominio propio.
 
   - type: web
     name: finanzas-web
@@ -28,7 +27,8 @@ services:
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     envVars:
-      # Cambiala por la URL real del backend una vez creado.
+      # IMPORTANTE: cambiala por la URL real del backend en cuanto Render la
+      # genere, y vuelve a desplegar este servicio (se hornea en el build).
       - key: VITE_API_URL
         value: https://finanzas-api.onrender.com
     routes:
