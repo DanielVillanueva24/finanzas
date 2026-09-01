@@ -1,0 +1,31 @@
+# Configuracion de Netlify para el frontend.
+# El backend NO va aqui: Netlify Functions no soporta Python. FastAPI se queda
+# en Render (u otro host con runtime Python).
+
+[build]
+  # El proyecto React vive en una subcarpeta del repo.
+  base = "frontend"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Rutas del SPA: cualquier URL devuelve index.html y React Router se encarga.
+# Sin esto, recargar en /transacciones da 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# El service worker nunca debe quedarse cacheado, o los usuarios se quedan
+# atorados en una version vieja de la app.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

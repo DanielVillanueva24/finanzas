@@ -223,6 +223,24 @@ despues de dormir tarda ~30 segundos.
 
 ---
 
+## Alternativa: frontend en Netlify
+
+Netlify **no puede hospedar el backend** (sus Functions corren JavaScript y Go, no Python),
+asi que FastAPI se queda en Render. Pero el frontend si va bien ahi, y el repo trae
+`netlify.toml` con todo configurado: carpeta base, comando de build, rutas del SPA y cabeceras
+de cache.
+
+1. En Netlify: **Add new site > Import an existing project** y elige el repo.
+2. Netlify lee `netlify.toml`, no tienes que llenar los campos de build.
+3. En **Site configuration > Environment variables** agrega `VITE_API_URL` con la URL de tu
+   backend en Render.
+4. **Deploys > Trigger deploy > Clear cache and deploy site.**
+
+El paso 3 antes del 4: `VITE_API_URL` se hornea durante el build, si la agregas despues hay que
+volver a desplegar.
+
+---
+
 ## 8. Instalar la PWA en el iPhone
 
 > Safari es el unico navegador de iOS que permite instalar apps en la pantalla de inicio.
